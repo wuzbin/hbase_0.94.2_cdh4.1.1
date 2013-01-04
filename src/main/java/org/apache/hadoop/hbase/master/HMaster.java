@@ -19,6 +19,9 @@
  */
 package org.apache.hadoop.hbase.master;
 
+import org.apache.hadoop.hbase.ipc.ProtocolSignature;
+import org.apache.hadoop.hbase.ipc.RpcServer;
+import org.apache.hadoop.hbase.master.balancer.LoadBalancerFactory;
 import org.apache.commons.logging.Log;
 import org.apache.commons.logging.LogFactory;
 import org.apache.hadoop.conf.Configuration;
@@ -1062,7 +1065,7 @@ Server {
       List<ServerName> destServers = this.serverManager.getOnlineServersList();
       destServers.remove(p.getSecond());
       // If i have only one RS then destination can be null.
-      dest = balancer.randomAssignment(destServers);
+      dest = balancer.randomAssignment(p.getFirst(),destServers);
     } else {
       dest = new ServerName(Bytes.toString(destServerName));
     }

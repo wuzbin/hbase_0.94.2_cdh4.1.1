@@ -213,7 +213,7 @@ public class AssignmentManager extends ZooKeeperListener {
     this.balancer = balancer;
     this.threadPoolExecutorService = Executors.newCachedThreadPool();
   }
-  
+
   void startTimeOutMonitor() {
     Threads.setDaemonThreadRunning(timeoutMonitor.getThread(), master.getServerName()
         + ".timeoutMonitor");
@@ -382,7 +382,7 @@ public class AssignmentManager extends ZooKeeperListener {
   throws KeeperException, IOException, InterruptedException {
     List<String> nodes = ZKUtil.listChildrenAndWatchForNewChildren(watcher,
       watcher.assignmentZNode);
-    
+
     if (nodes == null) {
       String errorMessage = "Failed to get the children from ZK";
       master.abort(errorMessage, new IOException(errorMessage));
@@ -828,7 +828,7 @@ public class AssignmentManager extends ZooKeeperListener {
           // Handle this the same as if it were opened and then closed.
           regionState.update(RegionState.State.CLOSED,
               data.getStamp(), data.getOrigin());
-          // When there are more than one region server a new RS is selected as the 
+          // When there are more than one region server a new RS is selected as the
           // destination and the same is updated in the regionplan. (HBASE-5546)
           getRegionPlan(regionState, sn, true);
           this.executorService.submit(new ClosedRegionHandler(master,
@@ -1678,7 +1678,7 @@ public class AssignmentManager extends ZooKeeperListener {
             }
           }
         }
-        if (t instanceof java.net.SocketTimeoutException 
+        if (t instanceof java.net.SocketTimeoutException
             && this.serverManager.isServerOnline(plan.getDestination())) {
           LOG.warn("Call openRegion() to " + plan.getDestination()
               + " has timed out when trying to assign "
@@ -1735,8 +1735,8 @@ public class AssignmentManager extends ZooKeeperListener {
    * @param state
    * @param hijack
    *          - true if needs to be hijacked and reassigned, false otherwise.
-   * @param regionAlreadyInTransitionException  
-   *          - true if we need to retry assignment because of RegionAlreadyInTransitionException.       
+   * @param regionAlreadyInTransitionException
+   *          - true if we need to retry assignment because of RegionAlreadyInTransitionException.
    * @return the version of the offline node if setting of the OFFLINE node was
    *         successful, -1 otherwise.
    */
@@ -1749,7 +1749,7 @@ public class AssignmentManager extends ZooKeeperListener {
         String msg = "Unexpected state : " + state + " .. Cannot transit it to OFFLINE.";
         this.master.abort(msg, new IllegalStateException(msg));
         return -1;
-      } 
+      }
       LOG.debug("Unexpected state : " + state
           + " but retrying to assign because RegionAlreadyInTransitionException.");
     }
@@ -1809,7 +1809,7 @@ public class AssignmentManager extends ZooKeeperListener {
     } catch (KeeperException e) {
       if (e instanceof NodeExistsException) {
         LOG.warn("Node for " + state.getRegion() + " already exists");
-      } else { 
+      } else {
         master.abort("Unexpected ZK exception creating/setting node OFFLINE", e);
       }
       return false;
@@ -1881,8 +1881,8 @@ public class AssignmentManager extends ZooKeeperListener {
           || existingPlan.getDestination() == null
           || drainingServers.contains(existingPlan.getDestination())) {
         newPlan = true;
-        randomPlan = new RegionPlan(state.getRegion(), null, balancer
-            .randomAssignment(servers));
+        randomPlan = new RegionPlan(state.getRegion(), null,
+                  balancer.randomAssignment(state.getRegion(), servers));
         this.regionPlans.put(encodedName, randomPlan);
       }
     }

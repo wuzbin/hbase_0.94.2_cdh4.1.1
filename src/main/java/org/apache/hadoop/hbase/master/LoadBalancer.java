@@ -19,13 +19,14 @@
  */
 package org.apache.hadoop.hbase.master;
 
+import java.util.List;
+import java.util.Map;
+
+import org.apache.hadoop.classification.InterfaceAudience;
 import org.apache.hadoop.conf.Configurable;
 import org.apache.hadoop.hbase.ClusterStatus;
 import org.apache.hadoop.hbase.HRegionInfo;
 import org.apache.hadoop.hbase.ServerName;
-
-import java.util.List;
-import java.util.Map;
 
 /**
  * Makes decisions about the placement and movement of Regions across
@@ -43,6 +44,7 @@ import java.util.Map;
  *
  * <p>This classes produces plans for the {@link AssignmentManager} to execute.
  */
+@InterfaceAudience.Public
 public interface LoadBalancer extends Configurable {
 
   /**
@@ -91,8 +93,10 @@ public interface LoadBalancer extends Configurable {
 
   /**
    * Get a random region server from the list
+   * @param regionInfo Region for which this selection is being done.
    * @param servers
    * @return Servername
    */
-  public ServerName randomAssignment(List<ServerName> servers);
+  public ServerName randomAssignment(HRegionInfo regionInfo, 
+		  List<ServerName> servers);
 }
