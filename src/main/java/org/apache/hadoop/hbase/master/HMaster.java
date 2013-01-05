@@ -963,6 +963,8 @@ Server {
         this.assignmentManager.getAssignmentsByTable();
 
       List<RegionPlan> plans = new ArrayList<RegionPlan>();
+      //Give the balancer the current cluster state.
+      this.balancer.setClusterStatus(getClusterStatus());
       for (Map<ServerName, List<HRegionInfo>> assignments : assignmentsByTable.values()) {
         List<RegionPlan> partialPlans = this.balancer.balanceCluster(assignments);
         if (partialPlans != null) plans.addAll(partialPlans);
