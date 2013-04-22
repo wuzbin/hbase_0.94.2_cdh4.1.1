@@ -10,4 +10,5 @@
 deploy
 *.iml
 *.orig
+.gradle/
 *~
