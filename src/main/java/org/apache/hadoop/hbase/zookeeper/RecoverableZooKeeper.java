@@ -353,12 +353,7 @@ public class RecoverableZooKeeper {
             try{
               Stat stat = new Stat();
               byte[] revData = zk.getData(path, false, stat);
-              int idLength = Bytes.toInt(revData, ID_LENGTH_SIZE);
-              int dataLength = revData.length-ID_LENGTH_SIZE-idLength;
-              int dataOffset = ID_LENGTH_SIZE+idLength;
-              
-              if(Bytes.compareTo(revData, ID_LENGTH_SIZE, id.length, 
-                  revData, dataOffset, dataLength) == 0) {
+              if (Bytes.compareTo(revData, newData) == 0) {
                 // the bad version is caused by previous successful setData
                 return stat;
               }
